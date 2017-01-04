@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Slack incoming web-hook URL and user name
-url='CHANGEME'		# example: https://hooks.slack.com/services/QW3R7Y/D34DC0D3/BCADFGabcDEF123
-username='Zabbix'
+# BearyChat incoming web-hook URL
+url='CHANGEME'		# example: https://hook.bearychat.com/=bw96P/incoming/dc9bfa0f5c6276c25b24ba9a3d393109
 
 ## Values received by this script:
 # To = $1 (Slack channel or user to send the message to, specified in the Zabbix web interface; "@username" or "#channel")
@@ -27,6 +26,6 @@ fi
 #  followed by the message that Zabbix actually sent us ($3)
 message="${subject}: $3"
 
-# Build our JSON payload and send it as a POST request to the Slack incoming web-hook URL
-payload="payload={\"channel\": \"${to//\"/\\\"}\", \"username\": \"${username//\"/\\\"}\", \"text\": \"${message//\"/\\\"}\", \"icon_emoji\": \"${emoji}\"}"
-curl -m 5 --data-urlencode "${payload}" $url -A 'zabbix-slack-alertscript / https://github.com/ericoc/zabbix-slack-alertscript'
+# Build our JSON payload and send it as a POST request to the BearyChat incoming web-hook URL
+payload="payload={\"channel\": \"${to//\"/\\\"}\", \"text\": \"${emoji} ${message//\"/\\\"}\"}"
+curl -m 5 --data-urlencode "${payload}" $url -A 'zabbix-bearychat-alertscript / https://github.com/ericoc/zabbix-bearychat-alertscript'
