@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # BearyChat incoming web-hook URL
-url='CHANGEME'		# example: https://hook.bearychat.com/=bw96P/incoming/dc9bfa0f5c6276c25b24ba9a3d393109
+url='CHANGEME'		# example: https://hook.bearychat.com/XXX/incoming/XXXXXXXXXXXXXXXXXXXXXXX
 
 ## Values received by this script:
 # To = $1 (Slack channel or user to send the message to, specified in the Zabbix web interface; "@username" or "#channel")

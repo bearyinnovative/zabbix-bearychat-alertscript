@@ -38,11 +38,12 @@ Zabbix 1.8.x 以上(包含 2.2， 2.4和3.x！)
 
 只需要复制上面截图中的**Hook 地址**
 
-    https://hook.bearychat.com/=bw96P/incoming/dc9bfa0f5c6276c25b24ba9a3d393109
+    https://hook.bearychat.com/XXX/incoming/XXXXXXXXXXXXXXXXXXXXXXX
 	
 确认你的`Incoming 机器人`配置没有问题后，修改`bearychat.sh`脚本：
+	
 	# BearyChat incoming web-hook URL
-	url='https://hook.bearychat.com/=bw96P/incoming/dc9bfa0f5c6276c25b24ba9a3d393109'
+	url='https://hook.bearychat.com/XXX/incoming/XXXXXXXXXXXXXXXXXXXXXXX'
 
 ### Zabbix配置
 
@@ -60,10 +61,21 @@ Zabbix 1.8.x 以上(包含 2.2， 2.4和3.x！)
 
 ![](https://raw.githubusercontent.com/bearyinnovative/zabbix-bearychat-alertscript/master/imgs/add-user.png)
 
+### 测试
+
+在配置好脚本（`bearychat.sh`）后，可以在终端运行命令：
+
+    $ bash bearychat.sh 'some-channel' PROBLEM 'Oh no! Something is wrong!'
+    
+然后在`BearyChat`中就能看到一条推送：
+
+![](https://raw.githubusercontent.com/bearyinnovative/zabbix-bearychat-alertscript/master/imgs/test.png)
+
+
 更多信息
 ----------------
-* [Zabbix-Slack-AlertScript](https://github.com/ericoc/zabbix-slack-alertscript)
 * [BearyChat Incoming](https://bearychat.com/integrations/incoming)
+* [Zabbix-Slack-AlertScript](https://github.com/ericoc/zabbix-slack-alertscript)
 * [Zabbix 2.2 custom alertscripts documentation](https://www.zabbix.com/documentation/2.2/manual/config/notifications/media/script)
 * [Zabbix 2.4 custom alertscripts documentation](https://www.zabbix.com/documentation/2.4/manual/config/notifications/media/script)
 * [Zabbix 3.x custom alertscripts documentation](https://www.zabbix.com/documentation/3.0/manual/config/notifications/media/script)
