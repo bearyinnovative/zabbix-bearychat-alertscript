@@ -1,28 +1,22 @@
-Zabbix Slack AlertScript
+Zabbix BearyChat AlertScript
 ========================
 
+关于
+----
 
-About
------
-This is simply a Bash script that uses the custom alert script functionality within [Zabbix](http://www.zabbix.com/) along with the incoming web-hook feature of [Slack](https://slack.com/) that I got a chance to write since I could not find any already existing/similar scripts.
+这是一个简单的脚本：
+1. 关联[Zabbix](http://www.zabbix.com/)
+2. 当`Zabbix`事件触发时，发送消息至[BearyChat Incoming](https://bearychat.com/integrations/incoming)
 
-#### Versions
-This works with Zabbix 1.8.x or greater - including 2.2, 2.4 and 3.x!
+#### 适用版本
+Zabbix 1.8.x 以上(包含 2.2， 2.4和3.x！)
 
-#### Huge thanks and appreciation to:
-
-* [Paul Reeves](https://github.com/pdareeves/) for the hint that Slack changed their API/URLs!
-* [Igor Shishkin](https://github.com/teran) for the ability to message users as well as channels!
-* Leslie at AspirationHosting for confirming that this script works on Zabbix 1.8.2!
-* [Hiromu Yakura](https://github.com/hiromu) for escaping quotation marks in the fields received from Zabbix to have valid JSON!
-* [Devlin Gonçalves](https://github.com/devlinrcg), [tkdywc](https://github.com/tkdywc), [damaarten](https://github.com/damaarten), and [lunchables](https://github.com/lunchables) for Zabbix 3.0 AlertScript documentation, suggestions and testing!
-
-Installation
+安装
 ------------
 
-### The script itself
+### 脚本
 
-This [`slack.sh` script](https://github.com/ericoc/zabbix-slack-alertscript/raw/master/slack.sh) needs to be placed in the `AlertScriptsPath` directory that is specified within the Zabbix servers' configuration file (`zabbix_server.conf`) and must be executable by the user running the zabbix_server binary (usually "zabbix") on the Zabbix server:
+[`bearychat.sh` 脚本](https://github.com/bearyinnovative/zabbix-bearychat-alertscript/raw/master/bearychat.sh) 需要放置在`Zabbix servers`配置文件(`zabbix_server.conf`)的`AlertScriptsPath`显示的目录下， 并且脚本可以被运行`zabbix_server`的用户运行(**Executable**):
 
 	[root@zabbix ~]# grep AlertScriptsPath /etc/zabbix/zabbix_server.conf
 	### Option: AlertScriptsPath
@@ -31,80 +25,57 @@ This [`slack.sh` script](https://github.com/ericoc/zabbix-slack-alertscript/raw/
 	[root@zabbix ~]# ls -lh /usr/local/share/zabbix/alertscripts/slack.sh
 	-rwxr-xr-x 1 root root 1.4K Dec 27 13:48 /usr/local/share/zabbix/alertscripts/slack.sh
 
-If you do change `AlertScriptsPath` (or any other values) within `zabbix_server.conf`, a restart of the Zabbix server software is required.
+如果你修改了`zabbix_server.conf`下的`AlertScriptsPath`字段(或者其他字段)， `Zabbix server`都需要重新启动。
 
-Configuration
+配置
 -------------
 
-### Slack.com web-hook
+### BearyChat.com web-hook
 
-An incoming web-hook integration must be created within your Slack.com account which can be done at [https://my.slack.com/services/new/incoming-webhook](https://my.slack.com/services/new/incoming-webhook) as shown below:
+你需要在BearyChat.com的团队中新建一个`Incoming 机器人`([https://your-team-subdomain.bearychat.com/robots](https://your-team-subdomain.bearychat.com/robots))
 
-![Slack.com Incoming Web-hook Integration](https://pictures.ericoc.com/github/newapi/slack-integration.png "Slack.com Incoming Web-hook Integration")
+![](https://raw.githubusercontent.com/bearyinnovative/zabbix-bearychat-alertscript/master/imgs/hook.png)
 
-Given the above screenshot, the incoming web-hook URL would be:
+只需要复制上面截图中的**Hook 地址**
 
-	https://hooks.slack.com/services/QW3R7Y/D34DC0D3/BCADFGabcDEF123
+    https://hook.bearychat.com/XXX/incoming/XXXXXXXXXXXXXXXXXXXXXXX
 	
-Make sure that you specify your correct Slack.com incoming web-hook URL and feel free to edit the sender user name at the top of the script:
+确认你的`Incoming 机器人`配置没有问题后，修改`bearychat.sh`脚本：
+	
+	# BearyChat incoming web-hook URL
+	url='https://hook.bearychat.com/XXX/incoming/XXXXXXXXXXXXXXXXXXXXXXX'
 
-	# Slack incoming web-hook URL and user name
-	url='https://hooks.slack.com/services/QW3R7Y/D34DC0D3/BCADFGabcDEF123'
-	username='Zabbix'
+### Zabbix配置
 
+登陆`Zabbix Web UI`后（请确保你有**管理员super-administrator**的权限），选择`Administration` -> `Media Types` -> `Create media type`, 创建一个媒体类型（`media typs`）：
 
-### Within the Zabbix web interface
-
-When logged in to the Zabbix servers web interface with super-administrator privileges, navigate to the "Administration" tab, access the "Media Types" sub-tab, and click the "Create media type" button.
-
-You need to create a media type as follows:
-
-* **Name**: Slack
+* **Name**: BearyChat
 * **Type**: Script
-* **Script name**: slack.sh
+* **Script name**: bearychat.sh
 
-...and ensure that it is enabled before clicking "Save", like so:
+![](https://raw.githubusercontent.com/bearyinnovative/zabbix-bearychat-alertscript/master/imgs/media.png)
 
-![Zabbix Media Type](https://pictures.ericoc.com/github/zabbix-mediatype.png "Zabbix Media Type")
+确认`enabled`选项被选中后，点击“Save”保存这个媒体类型。
 
-However, on Zabbix 3.x and greater, media types are configured slightly differently and you must explicity define the parameters sent to the `slack.sh` script. On Zabbix 3.x, three script parameters should be added as follows:
+然后，选择`Administration` -> `Users` -> `Create User`添加一个用户，在`Media`分类中添加一个`BearyChat`类型的`Media`：
 
-* `{ALERT.SENDTO}`
-* `{ALERT.SUBJECT}`
-* `{ALERT.MESSAGE}`
+![](https://raw.githubusercontent.com/bearyinnovative/zabbix-bearychat-alertscript/master/imgs/add-user.png)
 
-...as shown here:
+### 测试
 
-![Zabbix 3.x Media Type](https://pictures.ericoc.com/github/zabbix3-mediatype.png "Zabbix 3.x Media Type")
+在配置好脚本（`bearychat.sh`）后，可以在终端运行命令：
 
-Then, create a "Slack" user on the "Users" sub-tab of the "Administration" tab within the Zabbix servers web interface and specify this users "Media" as the "Slack" media type that was just created with the Slack.com channel ("#alerts" in the example) or user name (such as "@ericoc") that you want messages to go to in the "Send to" field as seen below:
+    $ bash bearychat.sh 'some-channel' PROBLEM 'Oh no! Something is wrong!'
+    
+然后在`BearyChat`中就能看到一条推送：
 
-![Zabbix User](https://pictures.ericoc.com/github/zabbix-user.png "Zabbix User")
-
-Finally, an action can then be created on the "Actions" sub-tab of the "Configuration" tab within the Zabbix servers web interface to notify the Zabbix "Slack" user ensuring that the "Subject" is "PROBLEM" for "Default message" and "RECOVERY" should you choose to send a "Recovery message".
-
-Keeping the messages short is probably a good idea; use something such as the following for the contents of each message:
-
-	{TRIGGER.NAME} - {HOSTNAME} ({IPADDRESS})
-
-Additionally, you can have multiple different Zabbix users each with "Slack" media types that notify unique Slack users or channels upon different triggered Zabbix actions.
-
-If you are interesting in longer notification messages (with line breaks for example), you may want to reference [this pull request](https://github.com/ericoc/zabbix-slack-alertscript/pull/16) or [any number of forks of this repository](https://github.com/ericoc/zabbix-slack-alertscript/network).
-
-Testing
--------
-Assuming that you have set a valid Slack web-hook URL within your "slack.sh" file, you can execute the script manually (as opposed to via Zabbix) from Bash on a terminal:
-
-	$ bash slack.sh '@ericoc' PROBLEM 'Oh no! Something is wrong!'
-
-Alerting a specific user name results in the message actually coming from the "slackbot" user using a sort-of "spoofed" user name within the message. A channel alert is sent as you would normally expect from whatever user name you specify in "slack.sh":
-
-![Slack Testing](https://pictures.ericoc.com/github/slack-example.png "Slack Testing")
+![](https://raw.githubusercontent.com/bearyinnovative/zabbix-bearychat-alertscript/master/imgs/test.png)
 
 
-More Information
+更多信息
 ----------------
-* [Slack incoming web-hook functionality](https://my.slack.com/services/new/incoming-webhook)
+* [BearyChat Incoming](https://bearychat.com/integrations/incoming)
+* [Zabbix-Slack-AlertScript](https://github.com/ericoc/zabbix-slack-alertscript)
 * [Zabbix 2.2 custom alertscripts documentation](https://www.zabbix.com/documentation/2.2/manual/config/notifications/media/script)
 * [Zabbix 2.4 custom alertscripts documentation](https://www.zabbix.com/documentation/2.4/manual/config/notifications/media/script)
 * [Zabbix 3.x custom alertscripts documentation](https://www.zabbix.com/documentation/3.0/manual/config/notifications/media/script)
