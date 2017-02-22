@@ -6,7 +6,7 @@ Zabbix BearyChat AlertScript
 
 这是一个简单的脚本：
 1. 关联[Zabbix](http://www.zabbix.com/)
-2. 当`Zabbix`事件触发时，发送消息至[BearyChat Incoming](https://bearychat.com/integrations/incoming)
+2. 当`Zabbix`事件触发时，发送消息至[BearyChat Zabbix Robot](https://bearychat.com/integrations/zabbix)
 
 #### 适用版本
 Zabbix 1.8.x 以上(包含 2.2， 2.4和3.x！)
@@ -32,7 +32,7 @@ Zabbix 1.8.x 以上(包含 2.2， 2.4和3.x！)
 
 ### BearyChat.com web-hook
 
-你需要在BearyChat.com的团队中新建一个`Incoming 机器人`([https://your-team-subdomain.bearychat.com/robots](https://your-team-subdomain.bearychat.com/robots))
+你需要在BearyChat.com的团队中新建一个`Zabbix 机器人`([https://your-team-subdomain.bearychat.com/robots](https://your-team-subdomain.bearychat.com/robots))
 
 ![](https://raw.githubusercontent.com/bearyinnovative/zabbix-bearychat-alertscript/master/imgs/hook.png)
 
@@ -40,10 +40,10 @@ Zabbix 1.8.x 以上(包含 2.2， 2.4和3.x！)
 
     https://hook.bearychat.com/XXX/incoming/XXXXXXXXXXXXXXXXXXXXXXX
 	
-确认你的`Incoming 机器人`配置没有问题后，修改`bearychat.sh`脚本：
+确认你的`Zabbix 机器人`配置没有问题后，修改`bearychat.sh`脚本：
 	
-	# BearyChat incoming web-hook URL
-	url='https://hook.bearychat.com/XXX/incoming/XXXXXXXXXXXXXXXXXXXXXXX'
+	# BearyChat zabbix web-hook URL
+	url='https://hook.bearychat.com/XXX/zabbix/XXXXXXXXXXXXXXXXXXXXXXX'
 
 ### Zabbix配置
 
@@ -74,7 +74,7 @@ Zabbix 1.8.x 以上(包含 2.2， 2.4和3.x！)
 
 更多信息
 ----------------
-* [BearyChat Incoming](https://bearychat.com/integrations/incoming)
+* [BearyChat Zabbix](https://bearychat.com/integrations/zabbix)
 * [Zabbix-Slack-AlertScript](https://github.com/ericoc/zabbix-slack-alertscript)
 * [Zabbix 2.2 custom alertscripts documentation](https://www.zabbix.com/documentation/2.2/manual/config/notifications/media/script)
 * [Zabbix 2.4 custom alertscripts documentation](https://www.zabbix.com/documentation/2.4/manual/config/notifications/media/script)
