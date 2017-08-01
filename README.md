@@ -22,8 +22,8 @@ Zabbix 1.8.x 以上(包含 2.2， 2.4和3.x！)
 	### Option: AlertScriptsPath
 	AlertScriptsPath=/usr/local/share/zabbix/alertscripts
 
-	[root@zabbix ~]# ls -lh /usr/local/share/zabbix/alertscripts/slack.sh
-	-rwxr-xr-x 1 root root 1.4K Dec 27 13:48 /usr/local/share/zabbix/alertscripts/slack.sh
+	[root@zabbix ~]# ls -lh /usr/local/share/zabbix/alertscripts/bearychat.sh
+	-rwxr-xr-x 1 root root 1.4K Dec 27 13:48 /usr/local/share/zabbix/alertscripts/bearychat.sh
 
 如果你修改了`zabbix_server.conf`下的`AlertScriptsPath`字段(或者其他字段)， `Zabbix server`都需要重新启动。
 
