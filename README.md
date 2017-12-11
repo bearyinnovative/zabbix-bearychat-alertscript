@@ -38,7 +38,7 @@ Zabbix 1.8.x 以上(包含 2.2， 2.4和3.x！)
 
 只需要复制上面截图中的**Hook 地址**
 
-    https://hook.bearychat.com/XXX/incoming/XXXXXXXXXXXXXXXXXXXXXXX
+    https://hook.bearychat.com/XXX/zabbix/XXXXXXXXXXXXXXXXXXXXXXX
 	
 确认你的`Zabbix 机器人`配置没有问题后，修改`bearychat.sh`脚本：
 	
